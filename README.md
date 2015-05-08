@@ -70,5 +70,5 @@ $ git log
 ```
 you can also do a git diff and it'll show you the differences between commits
 ```bash
-git diff
+$ git diff
 ```
