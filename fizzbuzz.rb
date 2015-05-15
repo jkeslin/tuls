@@ -101,13 +101,6 @@ end
 solve_fizzbuzz(1, 100_000)
 
 
-# Benchmark.bm do |bm|
-#   bm.report { solve_fizzbuzz(1, 100_000) }
-# end
-
-# Benchmark.bm do |bm|
-#   bm.report { megs_approach }
-# end
 
 #TRYING to get a random integers? Try:
 #rand(6) + 1
