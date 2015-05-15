@@ -52,6 +52,7 @@ end
 #ruby convention: if method is designed to return a boolean, end it with a question mark
 #this makes sense.  i think i thought when i saw ? in previous lessons they were required for the method to work - but it's simply a convention?
 # =>simply a convention, yes.  The way you used the "?" in your solution was different however.  that was a ternary operator, which is a nice way of writing an if/else statement in one line of code. Here's a nice little tutorial on that subject: http://rubylearning.com/satishtalim/simple_constructs.html
+    #=> k.  I feel like when I learned the : ? construct it was introduced as interchangable with if then.  Should I practice if, then for now?
 
 def replace_with_fizz?(integer)
   integer % 3 == 0
@@ -87,6 +88,10 @@ def print_fizzbuzzed(array)
 end
 #why is this definition here?
 # => it's not really necessary, again it's really just overkill on trying to demonstrate readability 
+  # => Oh I just realized that you defined this here and used it below.  I think I didn't see that before.
+  # => So is the convention to define all interior and referred to methods in the first lines and then the last line is the compounding of all the methods?  
+  # => Is there any special order that the above defnitions generally need to follow?  
+  # => For example, if you think of your final process as a composite function with the argument inside, should the definitions follow the order of the compounded methods or arguments.  I'm not even sure that makes sense.  We can chat Sunday.
 
 #this method is the runner, so to speak
 def solve_fizzbuzz(min, max)
