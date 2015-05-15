@@ -1,13 +1,13 @@
 require 'benchmark'
 
 def megs_approach
-  tuls = [*1..100_000]
-  poopy = []
-  poopy.push(tuls.map{ |e| e %3 == 0 && e %5 ==0 ? "fizzbuzz": 
-  	e %3 == 0 ? "fizz" : 
-  	e %5 == 0 ? "buzz" : 
-  	e })
-  puts poopy
+  integers = [*1..100_000]
+  fizzbuzz_array = []
+  fizzbuzz_array.push(numbers.map{ |integer| integer %3 == 0 && integer %5 ==0 ? "fizzbuzz": 
+  	integer %3 == 0 ? "fizz" : 
+  	integer %5 == 0 ? "buzz" : 
+  	integer })
+  puts fizzbuzz_array
 end
 # megs_approach
 
@@ -43,8 +43,11 @@ end
 def build_array_from_range(min, max)
   (min..max).to_a
 end
+#to_a makes a new array, right??
+#does this convention allow for more quick changing of the parameters or why the min, max vs. 1, 100>
 
 #ruby convention: if method is designed to return a boolean, end it with a question mark
+#this makes sense.  i think i thought when i saw ? in previous lessons they were required for the method to work - but it's simply a convention?
 def replace_with_fizz?(integer)
   integer % 3 == 0
 end
@@ -56,6 +59,7 @@ end
 def replace_with_fizzbuzz?(integer)
   integer % 3 == 0 && integer % 5 == 0
 end
+#why is it better to make each of these their own defined method?
 
 def check_for_replacement(integers_array)
   integers_array.map! do |integer|
@@ -67,10 +71,14 @@ def check_for_replacement(integers_array)
   end
   integers_array
 end
+#generally should I use if, elseif, else rather than : and ?
+#did you have to define integers_array or if you put _array will it automatically make it an array
 
 def print_fizzbuzzed(array)
   puts array
 end
+#why is this definition here?
+
 
 #this method is the runner, so to speak
 def solve_fizzbuzz(min, max)
