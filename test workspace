@@ -1,0 +1,1 @@
+5.times.map(random.rand(6))
