@@ -1,5 +1,5 @@
 require 'benchmark'
-
+  
 def megs_approach
   integers = [*1..100_000]
   fizzbuzz_array = []
