@@ -1,18 +1,21 @@
-class Meg
+class Tree
   def initialize
-    @range = nil
+    @num_apple = nil
+    @age = 22
+    @color = nil
   end
 
 
   def print_a_shit_ton(min, max)
     fill_range(min, max)
     @range.each {|item| puts "tuls"*item }
+    puts @age
   end
 
   def fill_range(min, max)
     @range = (min..max).to_a
   end
-  
+
 end
 
 
