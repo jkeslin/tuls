@@ -1,15 +1,16 @@
 require 'benchmark'
-  
-def megs_approach
-  integers = [*1..100_000]
-  fizzbuzz_array = []
-  fizzbuzz_array.push(numbers.map{ |integer| integer %3 == 0 && integer %5 ==0 ? "fizzbuzz": 
+require 'pry'
+
+def megs_approach(min, max)
+  integers = [*min..max]
+  integers.map!{ |integer| integer %3 == 0 && integer %5 ==0 ? "fizzbuzz": 
   	integer %3 == 0 ? "fizz" : 
   	integer %5 == 0 ? "buzz" : 
   	integer })
-  puts fizzbuzz_array
+  puts integers
 end
-# megs_approach
+
+megs_approach(1, 10000000)
 
 
 
@@ -62,24 +63,25 @@ def replace_with_buzz?(integer)
   integer % 5 == 0
 end
 
-def replace_with_fizzbuzz?(integer)
-  integer % 3 == 0 && integer % 5 == 0
-end
 #why is it better to make each of these their own defined method?
 # =>it makes the code easier to maintain and edit and reuse in other places.  Not at all necessary, for something like fizzbuzz, but a good habit for when things get more complicated.  It's like if you had design drawings for a house.  It's easier to work with if the plumbing schematic is on one page, and the electrical is on another, and the heating/AC is on another page, etc. 
 
 def check_for_replacement(integers_array)
+  binding.pry
   integers_array.map! do |integer|
     if    replace_with_fizzbuzz?(integer) then "fizzbuzz"
     elsif replace_with_buzz?(integer)     then "buzz"
     elsif replace_with_fizz?(integer)     then "fizz"
     else  integer
     end
-  end
+  en
   integers_array
 end
 #generally should I use if, elseif, else rather than : and ?
 # =>totally up to you, I just like the ifs and thens cause it forms a sentence-ish.
+def replace_with_fizzbuzz?(integer)
+  integer % 3 == 0 && integer % 5 == 0
+end
 #did you have to define integers_array or if you put _array will it automatically make it an array
 # =>integers_array could have been called anything.  what matters is that when I CALL the check_for_replacement method (like in like 93) that the argument I give it is an array
 
@@ -103,7 +105,7 @@ end
 #driver code below#
 #-----------------#
 
-solve_fizzbuzz(1, 100_000)
+solve_fizzbuzz(1, 10000)
 
 
 # Benchmark.bm do |bm|
