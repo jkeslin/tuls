@@ -25,30 +25,42 @@
 class CreditCard
 
 	def initialize(card_number)
-		raise ArgumentError.new("Please enter a valid 16-digit card number with no spaces.") if card_number.to_s.length != 16
+		#made argument error into seperate method that is called during init.
+		check_card_length(card_number)		
 		@card_number = card_number
-		@number_in_digits = nil
+		#run split_into_digits on initialization
+		@number_in_digits = split_into_digits
+	end
+
+	def card_length_error
+		ArgumentError.new("Please enter a valid 16-digit card number with no spaces.")
+	end
+
+	def check_card_length(number)
+		raise card_length_error if number.to_s.length != 16
 	end
 
 	def split_into_digits
-		@number_in_digits = @card_number.to_s.split(//).map! {|string| string.to_i}
+		@number_in_digits = @card_number.to_s.split(//).map! { |string| string.to_i }
 	end
 
 	def double_alternating_digits
-		@number_in_digits.map!.with_index {|digit, index| if index%2==0 then digit*2 else digit end}
+		#changed {} into 'do' block because there are multiple lines of code inside
+		@number_in_digits.map!.with_index do |digit, index| 
+			if    index % 2 == 0 then digit*2 
+			else                      digit 
+			end
+		end
 	end
 
 	def check_number_sum
 		sum_of_digits = @number_in_digits.to_s.split(//).map! {|string| string.to_i}.inject(:+)
-		if sum_of_digits%10==0
-			return true
-		else
-			return false
-		end
+		#cleaned up if statement a little (it's okay to put spaces between things)
+		return true if sum_of_digits % 10 == 0 
+		return false
 	end
 
 	def check_card
-		split_into_digits
 		double_alternating_digits
 		check_number_sum
 	end
@@ -71,9 +83,6 @@ p card_2.check_card
 
 
 # 1. DRIVER TESTS GO BELOW THIS LINE
-
-
-
 
 
 
