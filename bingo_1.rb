@@ -1,204 +1,133 @@
-# U2.W5: A Nested Array to Model a Bingo Board SOLO CHALLENGE
+#================================================#
+#========== Jeff's General Thoughts =============#
+#================================================#
+# 1.  With this setup, there's no way to have a 'ball' selected for you at random
+#     without initializing a new board since @bingo_letters.sample only occurs during initalization
+# 2.  I think there should be a seperate class for handling the selected 'balls' since
+#     the 'called_letter' and 'called_number' are not really properties of the board.
+# 3.  With a board setup like:
+      #[[47, 44, 71, 8, 88],
+      #[22, 69, 75, 65, 73],
+      #[83, 85, 97, 89, 57],
+      #[25, 31, 96, 68, 51],
+      #[75, 70, 54, 80, 83]]
+      #how does someone reading your code know how the BINGO letters relate to this?
+      #obviously people who have played bingo can figure out that each array is a row
+      #and that each letter is the head of a column, but it forces you to assume that
+      #the person reading/editing your code knows bingo.  In the case of bingo that's
+      #probably not a big deal, but when you're writing real world code these sorts of
+      #assumptions matter and should be avoided.
+# 4.  I'm going to attempt to refactor this program using the following data structure instead:
 
-# I spent [#] hours on this challenge.
-#12:25
+BOARD = {
+  b: [7, 4, 1, 8, 9],
+  i: [2, 6, 5, 8, 3],
+  n: [3, 8, 9, 1, 7],
+  g: [2, 1, 6, 8, 5],
+  o: [7, 1, 5, 2, 3]
+}
+# 5.  I know some issues might arise later with the orientation of the rows/columns,
+#     but I'm going to ignore that for now.
+# 6.  What I wrote below is probably way off track of whatever guidelines DBC gave
+#     you to start with and fails all the rpsec tests, but whatever.  Do 'ruby bingo_1.rb'
+#     and see how it goes.
+#================================================#
+#=========== End of Thoughts ====================#
+#================================================#
 
-# Release 0: Pseudocode
-# Outline:
+class Game
+  attr_reader :letter, :number
 
-# Create a method to generate a letter ( b, i, n, g, o) and a number (1-100)
-  #fill in the outline here
-  # => create letter array with BINGO and take one sample in new array that is the called letter
-  # => generate random number 1 to 100 and assign to the variable called number
+  def initialize
+    @bingo_letters = [:b, :i, :n, :g, :o]
+  end
 
+  def pick_bingo_ball
+    select_letter && select_number && call_bingo_value
+  end
 
-# Check the called column for the number called.
-  #fill in the outline here
-  # => check if the column is in the nested array with index 0, 1, 2, 3 or 4
-  
+  def select_letter
+    @letter = @bingo_letters.sample
+  end
 
-# If the number is in the column, replace with an 'x'
-  #fill in the outline here
-  # => once there's a match, check if the number compares to any of the elements in that position
-
-# Display a column to the console
-  #fill in the outline here
-  # => print the column to the console???
-
-# Display the board to the console (prettily)
-  #fill in the outline here
-  # => print bingo board one nested array at a time
-
-# Release 1: Initial Solution
-
-# class BingoBoard
-
-#   attr_accessor :called_letter, :called_number
-
-#   def initialize(board)
-#     @bingo_board = board
-#     @called_letter = nil
-#     @called_number = nil
-#   end
-
-#   def call_bingo_value
-#     if @called_number == nil && @called_letter == nil
-#     letters = ['B', 'I' , 'N' ,'G', 'O']
-#     @called_letter = letters.sample
-#     @called_number = rand(1..100)
-#     end
-
-#     puts "You got #{@called_letter}-#{@called_number.to_s}"
-#   end
-  
-#   def check_column
-#     @transposed_board = @bingo_board.transpose
-#     case @called_letter
-#       when "B"
-#         puts @column = @transposed_board[0]
-#       when "I"
-#         puts @column = @transposed_board[1]
-#       when "N"
-#         puts @column = @transposed_board[2]
-#       when "G"
-#         puts @column = @transposed_board[3]
-#       when "O"
-#         puts @column = @transposed_board[4]
-#     end
-#   end
-
-#   def check_bingo_value
-#     @column.map! do |number| 
-#       if number == @called_number then 'X'
-#       else number
-#       end
-#     end
-#   end
-
-#   def print_updated_board
-#     puts "Your bingo board:"
-#     @transposed_board.transpose.each do |number|
-#       puts number.join(' ')
-#     end
-#   end
-
-#   def play_bingo
-#     call_bingo_value
-#     check_column
-#     check_bingo_value
-#     print_updated_board
-#   end
-
-# end
-
-# Release 3: Refactored Solution
-# REFACTORED AFTER DBC FEEDBACK
-class BingoBoard
-
-  attr_accessor :called_letter, :called_number
-
-  def initialize(board)
-    @bingo_board = board
-    @bingo_letters = ['B', 'I' , 'N' ,'G', 'O']
-    @called_letter = @bingo_letters.sample
-    @called_number = rand(1..100)
+  def select_number
+    @number = rand(1..10)
   end
 
   def call_bingo_value
-    # if @called_number == nil && @called_letter == nil
-    # @called_letter = @bingo_letters.sample
-    # @called_number = rand(1..100)
-    # end
-    puts "You got #{@called_letter}-#{@called_number.to_s}"
-  end
-  
-  def check_column
-    column_index = @bingo_letters.index(@called_letter)
-
-    @bingo_board.each do |bingo_row|
-        puts bingo_row[column_index]
-    end
-
-    # puts @column
-
-    # REFACTOR OPTION 1:  this was the first idea to automate the index verses using the case/when structure for each letter
-    # => @transposed_board = @bingo_board.transpose
-    # => @column = @transposed_board[@bingo_letters.index(@called_letter)]
-    # 
-    # INITIAL CODE (removed):
-    # case @called_letter
-    #   when "B"
-    #     puts @column = @transposed_board[0]
-    #   when "I"
-    #     puts @column = @transposed_board[1]
-    #   when "N"
-    #     puts @column = @transposed_board[2]
-    #   when "G"
-    #     puts @column = @transposed_board[3]
-    #   when "O"
-    #     puts @column = @transposed_board[4]
-    # end
-  end
-
-  def check_bingo_value
-    
-    # REFACTORED CODE AFTER DBC FEEDBACK
-    # column_index = @bingo_letters.index(@called_letter)
-
-    @bingo_board.each do |bingo_row|
-      bingo_row.map! do |bingo_space|
-        if bingo_space == @called_number then 'X'
-        else bingo_space
-        end
-      end
-    end
-
-    # INITIAL METHOD CODE:
-    # p @bingo_board
-    # @column.map! do |number| 
-    #   if number == @called_number then 'X'
-    #   else number
-    #   end
-    # end
-  end
-
-  def print_updated_board
-    puts "Your bingo board:"
-    @bingo_board.each do |number|
-      puts number.join(' ')
-    end
-  end
-
-  def play_bingo
-    call_bingo_value
-    check_column
-    check_bingo_value
-    print_updated_board
+    puts "="*10
+    puts "#{@letter.to_s.upcase}-#{@number} has been chosen"
   end
 
 end
 
-# Release 2: DRIVER TESTS GO BELOW THIS LINE
-board = [[47, 44, 71, 8, 88],
-        [22, 69, 75, 65, 73],
-        [83, 85, 97, 89, 57],
-        [25, 31, 96, 68, 51],
-        [75, 70, 54, 80, 83]]
 
-game = BingoBoard.new(board)
-game.play_bingo
+class BingoBoard
+  attr_reader :token
 
-game_1 = BingoBoard.new(board)
-game_1.called_letter='G'
-game_1.called_number=68
-p game_1.play_bingo[3][3] == 'X'
+  def initialize
+    @bingo_board = BOARD
+    @token = "X"
+  end
 
-game_2 = BingoBoard.new(board)
-game_2.called_letter='O'
-game_2.called_number=88
-p game_2.play_bingo[0][4] == 'X'
+  def check_my_board(letter, number)
+    check_column(letter, number)
+    print_results
+  end
 
+  def check_column(letter, number)
+    if    column_contains_called_number?(letter, number)
+    then  print_success_message && replace_spot_with_token(letter, number)
+    else  print_fail_message
+    end
+  end
 
+  def column_contains_called_number?(letter, number)
+    @bingo_board[letter].include?(number)
+  end
+
+  def replace_spot_with_token(letter, number)
+    @bingo_board[letter].map! do |board_num|
+      if   board_num == number then token
+      else board_num
+      end
+    end
+  end
+
+  def print_success_message
+    puts "You have that!"
+    true
+  end
+
+  def print_fail_message
+    puts "Sorry, try again!"
+  end
+
+  def print_results
+    puts "Your current board:"
+    print_updated_board
+    puts "="*10
+  end
+
+  def print_updated_board
+    @bingo_board.each do |header, column|
+      puts "#{header.to_s.upcase}: #{column}"
+    end
+  end
+
+end
+
+#DRIVER TESTS GO BELOW THIS LINE
+#======================
+my_board = BingoBoard.new
+game = Game.new
+
+10.times do
+  game.pick_bingo_ball
+  my_board.check_my_board(game.letter, game.number)
+end
+#next you would probably wanna write something to check and see if you have bingo. fun!
+#======================
 
 # Release 4: Reflection
 # I really enjoyed this challenge.  Since it does not have rspec tests created, I am also hoping that I followed the directions correctly; however, I ran some tests and it returned what I expected.
@@ -210,8 +139,7 @@ p game_2.play_bingo[0][4] == 'X'
 # When I completed the final piece, I added attr accessors to the letter and number so I could override them with values on the bingo board to test for the appearance of 'X' since the likelihood of actually acheiving this randomly is low.
 # If this were a true bingo board I would have ran the test n times to see it happen more naturally.
 # It was good to test specific values and to run the file multiple times because I found an error that only happened when I selected "O" because of a typo.
-# I wish I had more time to do the extension of creating a more realistic bingo board.  
+# I wish I had more time to do the extension of creating a more realistic bingo board.
 # Again, I found this to be a challenge that really helped me with working on the sort of "extra" skills of coding like pseudocode, breaking it down, and running tests.
 # I am still struggling to refactor.  I think maybe I do too much refactoring as I write the code, and tnen also at the end I need to ask for feedback on refactoring so I can better see the process.
 # I think a good challenge in week 4 and week 5 for future DBC cohorts would be to exchange code with a partner and refactor.  That should be a paired challenge.  Write the solutions independently, and then the pairing is refactoring.
-
