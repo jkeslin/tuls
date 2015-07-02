@@ -39,23 +39,24 @@ class Game
   attr_reader :letter, :number
 
   def initialize
-    @bingo_letters = [:b, :i, :n, :g, :o]
+    @bingo_letters = [:b, :i, :n, :g, :o] 
   end
-
-  def pick_bingo_ball
+#why use symbols instead of strings?  Just easier with hashes?  Is there something about memory?
+  def pick_bingo_ball     
     select_letter && select_number && call_bingo_value
   end
-
+#I've not seen using && with methods, is this typical?
+#Also any reason you listed this method above the others?  Or doesn't matter?
   def select_letter
     @letter = @bingo_letters.sample
   end
 
   def select_number
-    @number = rand(1..10)
+    @number = rand(1..10)   #did you make this smaller to actually get bingos?
   end
 
   def call_bingo_value
-    puts "="*10
+    puts "="*10   #I like this.  Is this something a lot of people do or just you as you're testing it out?
     puts "#{@letter.to_s.upcase}-#{@number} has been chosen"
   end
 
@@ -66,7 +67,7 @@ class BingoBoard
   attr_reader :token
 
   def initialize
-    @bingo_board = BOARD
+    @bingo_board = BOARD   #why use a constant here?  Is that so you can keep updating the same board?
     @token = "X"
   end
 
@@ -93,10 +94,10 @@ class BingoBoard
       end
     end
   end
-
+#Why use multiple methods with the same arguments rather than initalizing an instance variable for letter/number?
   def print_success_message
     puts "You have that!"
-    true
+    true  #why should this return true also?
   end
 
   def print_fail_message
@@ -111,11 +112,23 @@ class BingoBoard
 
   def print_updated_board
     @bingo_board.each do |header, column|
-      puts "#{header.to_s.upcase}: #{column}"
+      puts "#{header.to_s.upcase}:  #{column.join('  ')}"
     end
   end
 
 end
+
+#MEG'S THOUGHTS
+#--------------
+#This is really fun/helpful to look at.  (Thank you.)  My big ideas are:
+# => I remember we talked about doing 2 classes, so I should have done that already.  It's good to see that.  I still have trouble having classes communicate.
+# => I see the better single responsibility methods
+# => I like that yours has visual improvements when printed to console
+# => Although the hashes are sideways as you pointed out, they are far easier to work with when iterating because you don't need double index values which is hard to read and follow.
+# => Let's say I wanted to make an authentic BINGO game: "B" (numbers 1–15), "I" (numbers 16–30), "N" (numbers 31–45), "G" (numbers 46–60), and "O" (numbers 61–75) with a free space in the middle.
+# => How would I do that?  Would I have a separate class that creates the BOARD?  Would I have a method for each bingo letter?  method "B" method "I" etc?
+# => I have the bingo_2 file which is a class that checks for BINGOS.  Ideally I would combine these together.  I might work on that.
+#--------------
 
 #DRIVER TESTS GO BELOW THIS LINE
 #======================
