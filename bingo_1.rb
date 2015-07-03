@@ -39,24 +39,37 @@ class Game
   attr_reader :letter, :number
 
   def initialize
-    @bingo_letters = [:b, :i, :n, :g, :o] 
+    @bingo_letters = [:b, :i, :n, :g, :o]
   end
 #why use symbols instead of strings?  Just easier with hashes?  Is there something about memory?
-  def pick_bingo_ball     
+# => I basically used symbols because they are symbols in the board configuration on line 22.
+#    if I wrote them as ['b', 'i', ..etc] then I'd have to do BOARD[@bingo_letters.to_sym] to return the array
+  def pick_bingo_ball
     select_letter && select_number && call_bingo_value
   end
 #I've not seen using && with methods, is this typical?
+# => I'm not experienced enough to offically deem it typical, but I think it's a common practice.
+#    It's a nice approach because if you have something like: method_1 && method_2
+#    method_2 will only run if method_1 returns something 'truthy'
+#    and I like the way it reads.
+#    Line 48 is basically saying: 'select a letter' and if that works 'select a number' and if
+#    that works 'call the bingo value'
 #Also any reason you listed this method above the others?  Or doesn't matter?
+# => I like to put the bigger-picture type methods at the top, and the methods that it
+#    calls below it.  Some people put all their methods in alpha order, i like to
+#    put them in more of a heirarchical kind of order.
   def select_letter
     @letter = @bingo_letters.sample
   end
 
   def select_number
-    @number = rand(1..10)   #did you make this smaller to actually get bingos?
+    @number = rand(1..10)   #did you make this smaller to actually get bingos? #yes
   end
 
   def call_bingo_value
     puts "="*10   #I like this.  Is this something a lot of people do or just you as you're testing it out?
+                  # => I put that there because I like visual separation between each run of the bingo ball choosing.
+                  #    Strictly a person preference thing.
     puts "#{@letter.to_s.upcase}-#{@number} has been chosen"
   end
 
@@ -68,6 +81,8 @@ class BingoBoard
 
   def initialize
     @bingo_board = BOARD   #why use a constant here?  Is that so you can keep updating the same board?
+                           # => it wasn't totally necessary, but constants are 'global' and so I could define it
+                           #    outside of the class like a did above and still use it on line 83.
     @token = "X"
   end
 
@@ -95,9 +110,12 @@ class BingoBoard
     end
   end
 #Why use multiple methods with the same arguments rather than initalizing an instance variable for letter/number?
+# => because the letter and number are not instance variables of the BingoBoard class, they are instance variables
+#    of the Game class. Therefore, these methods don't have access to that information here unless I pass them in as
+#    an argument.  Which I do below in the driver code on line 162.
   def print_success_message
     puts "You have that!"
-    true  #why should this return true also?
+    true  #why should this return true also? #see my comment on line 53, and look at how it's called on line 96.
   end
 
   def print_fail_message
@@ -127,6 +145,10 @@ end
 # => Although the hashes are sideways as you pointed out, they are far easier to work with when iterating because you don't need double index values which is hard to read and follow.
 # => Let's say I wanted to make an authentic BINGO game: "B" (numbers 1–15), "I" (numbers 16–30), "N" (numbers 31–45), "G" (numbers 46–60), and "O" (numbers 61–75) with a free space in the middle.
 # => How would I do that?  Would I have a separate class that creates the BOARD?  Would I have a method for each bingo letter?  method "B" method "I" etc?
+# ANSWER: Yes, I would create a seperate class or module that creates the bingo board. I would try to set it up so you could just pass in the word that you want to use in the title
+#         in this case, 'BINGO', and then have the logic of creating a board run from there.  And then if you wanted you could create a game of 'CHEESE', or even with
+#         more columns and create a 'THINGO' board. Or whatever. That would be cool.  Last year I took this challenge and turned it into a program to make bingo boards
+#         with buzzwords you would hear at Rauner PD.  Unfortunately, Lessem didn't approve of me whipping those out during super serious PD time. Lame.
 # => I have the bingo_2 file which is a class that checks for BINGOS.  Ideally I would combine these together.  I might work on that.
 #--------------
 
